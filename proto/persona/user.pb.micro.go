@@ -6,9 +6,10 @@ package persona
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	empty "github.com/golang/protobuf/ptypes/empty"
+	_ "github.com/golang/protobuf/ptypes/struct"
 	_ "github.com/golang/protobuf/ptypes/timestamp"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
+	status "google.golang.org/genproto/googleapis/rpc/status"
 	math "math"
 )
 
@@ -48,7 +49,7 @@ func NewUserServiceEndpoints() []*api.Endpoint {
 			Handler: "rpc",
 		},
 		&api.Endpoint{
-			Name:    "UserService.Read",
+			Name:    "UserService.Get",
 			Path:    []string{"/api/v1/users/{param}"},
 			Method:  []string{"GET"},
 			Handler: "rpc",
@@ -73,10 +74,10 @@ func NewUserServiceEndpoints() []*api.Endpoint {
 // Client API for UserService service
 
 type UserService interface {
-	Create(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*User, error)
-	Read(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*User, error)
-	Update(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*User, error)
-	Delete(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*empty.Empty, error)
+	Create(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*status.Status, error)
+	Get(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*User, error)
+	Update(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*status.Status, error)
+	Delete(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*status.Status, error)
 }
 
 type userService struct {
@@ -91,8 +92,18 @@ func NewUserService(name string, c client.Client) UserService {
 	}
 }
 
-func (c *userService) Create(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*User, error) {
+func (c *userService) Create(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*status.Status, error) {
 	req := c.c.NewRequest(c.name, "UserService.Create", in)
+	out := new(status.Status)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userService) Get(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*User, error) {
+	req := c.c.NewRequest(c.name, "UserService.Get", in)
 	out := new(User)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -101,19 +112,9 @@ func (c *userService) Create(ctx context.Context, in *UserRequest, opts ...clien
 	return out, nil
 }
 
-func (c *userService) Read(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*User, error) {
-	req := c.c.NewRequest(c.name, "UserService.Read", in)
-	out := new(User)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userService) Update(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*User, error) {
+func (c *userService) Update(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*status.Status, error) {
 	req := c.c.NewRequest(c.name, "UserService.Update", in)
-	out := new(User)
+	out := new(status.Status)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -121,9 +122,9 @@ func (c *userService) Update(ctx context.Context, in *UserRequest, opts ...clien
 	return out, nil
 }
 
-func (c *userService) Delete(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*empty.Empty, error) {
+func (c *userService) Delete(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*status.Status, error) {
 	req := c.c.NewRequest(c.name, "UserService.Delete", in)
-	out := new(empty.Empty)
+	out := new(status.Status)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -134,18 +135,18 @@ func (c *userService) Delete(ctx context.Context, in *UserRequest, opts ...clien
 // Server API for UserService service
 
 type UserServiceHandler interface {
-	Create(context.Context, *UserRequest, *User) error
-	Read(context.Context, *UserRequest, *User) error
-	Update(context.Context, *UserRequest, *User) error
-	Delete(context.Context, *UserRequest, *empty.Empty) error
+	Create(context.Context, *UserRequest, *status.Status) error
+	Get(context.Context, *UserRequest, *User) error
+	Update(context.Context, *UserRequest, *status.Status) error
+	Delete(context.Context, *UserRequest, *status.Status) error
 }
 
 func RegisterUserServiceHandler(s server.Server, hdlr UserServiceHandler, opts ...server.HandlerOption) error {
 	type userService interface {
-		Create(ctx context.Context, in *UserRequest, out *User) error
-		Read(ctx context.Context, in *UserRequest, out *User) error
-		Update(ctx context.Context, in *UserRequest, out *User) error
-		Delete(ctx context.Context, in *UserRequest, out *empty.Empty) error
+		Create(ctx context.Context, in *UserRequest, out *status.Status) error
+		Get(ctx context.Context, in *UserRequest, out *User) error
+		Update(ctx context.Context, in *UserRequest, out *status.Status) error
+		Delete(ctx context.Context, in *UserRequest, out *status.Status) error
 	}
 	type UserService struct {
 		userService
@@ -159,7 +160,7 @@ func RegisterUserServiceHandler(s server.Server, hdlr UserServiceHandler, opts .
 		Handler: "rpc",
 	}))
 	opts = append(opts, api.WithEndpoint(&api.Endpoint{
-		Name:    "UserService.Read",
+		Name:    "UserService.Get",
 		Path:    []string{"/api/v1/users/{param}"},
 		Method:  []string{"GET"},
 		Handler: "rpc",
@@ -185,18 +186,18 @@ type userServiceHandler struct {
 	UserServiceHandler
 }
 
-func (h *userServiceHandler) Create(ctx context.Context, in *UserRequest, out *User) error {
+func (h *userServiceHandler) Create(ctx context.Context, in *UserRequest, out *status.Status) error {
 	return h.UserServiceHandler.Create(ctx, in, out)
 }
 
-func (h *userServiceHandler) Read(ctx context.Context, in *UserRequest, out *User) error {
-	return h.UserServiceHandler.Read(ctx, in, out)
+func (h *userServiceHandler) Get(ctx context.Context, in *UserRequest, out *User) error {
+	return h.UserServiceHandler.Get(ctx, in, out)
 }
 
-func (h *userServiceHandler) Update(ctx context.Context, in *UserRequest, out *User) error {
+func (h *userServiceHandler) Update(ctx context.Context, in *UserRequest, out *status.Status) error {
 	return h.UserServiceHandler.Update(ctx, in, out)
 }
 
-func (h *userServiceHandler) Delete(ctx context.Context, in *UserRequest, out *empty.Empty) error {
+func (h *userServiceHandler) Delete(ctx context.Context, in *UserRequest, out *status.Status) error {
 	return h.UserServiceHandler.Delete(ctx, in, out)
 }

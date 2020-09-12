@@ -4,11 +4,12 @@ option go_package = "github.com/johnbellone/persona-service/proto/persona";
 
 import "google/api/field_behavior.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "google/rpc/status.proto";
 
 service RoleService {
-    rpc Create(RoleRequest) returns (Role) {
+    rpc Create(RoleRequest) returns (google.rpc.Status) {
         option(google.api.http).post = "/api/v1/roles";
     }
 
@@ -16,11 +17,11 @@ service RoleService {
         option(google.api.http).get = "/api/v1/roles/{param}";
     }
 
-    rpc Update(RoleRequest) returns (Role) {
+    rpc Update(RoleRequest) returns (google.rpc.Status) {
         option(google.api.http).put = "/api/v1/roles/{param}";
     }
 
-    rpc Delete(RoleRequest) returns (google.protobuf.Empty) {
+    rpc Delete(RoleRequest) returns (google.rpc.Status) {
         option(google.api.http).delete = "/api/v1/roles/{param}";
     }
 }
@@ -29,13 +30,16 @@ message RoleRequest {
     string realm = 1;
     oneof param {
         string name = 2;
-        string slug = 3;
+        string uuid = 3;
     }
 }
 
 message Role {
     string realm = 1;
     string name = 2;
-    string description = 3;
-    google.protobuf.Timestamp create_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+    string uuid = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+    string description = 4;
+    google.protobuf.Timestamp created = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Timestamp updated = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Struct metadata = 7;
 }

@@ -4,11 +4,11 @@ option go_package = "github.com/johnbellone/persona-service/proto/persona";
 
 import "google/api/field_behavior.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "google/rpc/status.proto";
 
 service RealmService {
-    rpc Create(RealmRequest) returns (Realm) {
+    rpc Create(Realm) returns (google.rpc.Status) {
         option(google.api.http).post = "/api/v1/realms";
     }
 
@@ -16,25 +16,26 @@ service RealmService {
         option(google.api.http).get = "/api/v1/realms/{param}";
     }
 
-    rpc Update(RealmRequest) returns (Realm) {
+    rpc Update(Realm) returns (google.rpc.Status) {
         option(google.api.http).put = "/api/v1/realms/{param}";
     }
 
-    rpc Delete(RealmRequest) returns (google.protobuf.Empty) {
-        option(google.api.http).delete = "/api/v1/realms/{param}";
+    rpc Delete(RealmRequest) returns (google.rpc.Status) {
+        option(google.api.http).delete = "/api/v1/realms/{parm}";
     }
 }
 
 message RealmRequest {
     oneof param {
         string name = 1;
-        string slug = 2;
+        string uuid = 2;
     }
 }
 
 message Realm {
     string name = 1;
-    string slug = 2;
+    string uuid = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
     string description = 3;
-    google.protobuf.Timestamp create_time = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Timestamp created = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Timestamp updated = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
 }

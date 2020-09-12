@@ -4,11 +4,12 @@ option go_package = "github.com/johnbellone/persona-service/proto/persona";
 
 import "google/api/field_behavior.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "google/rpc/status.proto";
 
 service UserService {
-    rpc Create(UserRequest) returns (User) {
+    rpc Create(UserRequest) returns (google.rpc.Status) {
         option(google.api.http).post = "/api/v1/users";
     }
 
@@ -16,11 +17,11 @@ service UserService {
         option(google.api.http).get = "/api/v1/users/{param}";
     }
 
-    rpc Update(UserRequest) returns (User) {
+    rpc Update(UserRequest) returns (google.rpc.Status) {
         option(google.api.http).put = "/api/v1/users/{param}";
     }
 
-    rpc Delete(UserRequest) returns (google.protobuf.Empty) {
+    rpc Delete(UserRequest) returns (google.rpc.Status) {
         option(google.api.http).delete = "/api/v1/users/{param}";
     }
 }
@@ -28,7 +29,7 @@ service UserService {
 message UserRequest {
     string realm = 1;
     oneof param {
-        string slug = 2;
+        string login = 2;
         string email = 3;
     }
 }
@@ -39,18 +40,24 @@ message User {
         STAGED = 1;
         PENDING = 2;
         ACTIVE = 3;
-        RESET = 4;
+        RECOVERY = 4;
         LOCKED = 5;
         SUSPENDED = 6;
+        EXPIRED = 7;
     }
 
-    string slug = 1;
-    string email = 2;
-    string name = 3;
-    State state = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
-    bool verified = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
-    google.protobuf.Timestamp last_password_change = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
-    google.protobuf.Timestamp last_login = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
-    google.protobuf.Timestamp last_active = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
-    google.protobuf.Timestamp create_time = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+    string realm = 1;
+    string uuid = 2;
+    string login = 3;
+    string name = 4;
+    string email = 5;
+    string password = 6;
+    State status = 7;
+    google.protobuf.Timestamp last_password_change = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Timestamp last_login = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Timestamp last_active = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Timestamp created = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Timestamp updated = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Timestamp activated = 13 [(google.api.field_behavior) = OUTPUT_ONLY];
+    google.protobuf.Struct metadata = 14;
 }

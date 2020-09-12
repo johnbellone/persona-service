@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/johnbellone/persona-service/internal/persona"
+	"github.com/johnbellone/persona-service/internal/handler"
 	pb "github.com/johnbellone/persona-service/proto/persona"
 	"github.com/micro/go-micro/v2"
 	log "github.com/micro/go-micro/v2/logger"
@@ -20,7 +20,7 @@ import (
 
 func logWrapper(fn server.HandlerFunc) server.HandlerFunc {
 	return func(ctx context.Context, req server.Request, rsp interface{}) error {
-		log.Tracef("[compute] server request: %v", req.Endpoint())
+		log.Tracef("[persona] request: %v", req.Endpoint())
 		err := fn(ctx, req, rsp)
 		return err
 	}
@@ -44,6 +44,7 @@ func main() {
 	service.Init()
 	if err := pb.RegisterUserServiceHandler(service.Server(), new(handler.UserService)); err != nil {
 		log.Fatal(err)
+		os.Exit(2)
 	}
 
 	if err := service.Run(); err != nil {
