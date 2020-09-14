@@ -1,7 +1,9 @@
 package model
 
 import (
-	"github.com/go-gorm/gorm"
+	"database/sql"
+
+	"gorm.io/gorm"
 )
 
 type Group struct {

@@ -41,10 +41,27 @@ func main() {
 		micro.WrapHandler(logWrapper),
 	)
 
+	// TODO: Add support for configuring error capture and tracing with Sentry.
+
 	service.Init()
-	if err := pb.RegisterUserServiceHandler(service.Server(), new(handler.UserService)); err != nil {
+	if err := pb.RegisterGroupServiceHandler(service.Server(), new(handler.GroupService)); err != nil {
 		log.Fatal(err)
 		os.Exit(2)
+	}
+
+	if err := pb.RegisterRoleServiceHandler(service.Server(), new(handler.RoleService)); err != nil {
+		log.Fatal(err)
+		os.Exit(3)
+	}
+
+	if err := pb.RegisterRealmServiceHandler(service.Server(), new(handler.RealmService)); err != nil {
+		log.Fatal(err)
+		os.Exit(4)
+	}
+
+	if err := pb.RegisterUserServiceHandler(service.Server(), new(handler.UserService)); err != nil {
+		log.Fatal(err)
+		os.Exit(5)
 	}
 
 	if err := service.Run(); err != nil {

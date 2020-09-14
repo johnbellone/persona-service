@@ -8,4 +8,5 @@ require (
 	github.com/micro/go-plugins v1.5.1
 	github.com/micro/micro v1.16.0
 	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
+	gorm.io/gorm v1.20.1
 )

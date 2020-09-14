@@ -11,7 +11,7 @@ import (
 
 type RealmService struct{}
 
-func (h *RealmService) Create(ctx context.Context, req *pb.RealmRequest, rsp *status.Status) error {
+func (h *RealmService) Create(ctx context.Context, req *pb.Realm, rsp *status.Status) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")
@@ -29,7 +29,7 @@ func (h *RealmService) Get(ctx context.Context, req *pb.RealmRequest, rsp *pb.Re
 	return nil
 }
 
-func (h *RealmService) Update(ctx context.Context, req *pb.RealmRequest, rsp *status.Status) error {
+func (h *RealmService) Update(ctx context.Context, req *pb.Realm, rsp *status.Status) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")

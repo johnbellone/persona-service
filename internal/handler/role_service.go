@@ -20,7 +20,7 @@ func (h *RoleService) Create(ctx context.Context, req *pb.RoleRequest, rsp *stat
 	return nil
 }
 
-func (h *RoleService) Get(ctx context.Context, req *pb.RoleRequest, rsp *status.Status) error {
+func (h *RoleService) Get(ctx context.Context, req *pb.RoleRequest, rsp *pb.Role) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")
@@ -29,7 +29,7 @@ func (h *RoleService) Get(ctx context.Context, req *pb.RoleRequest, rsp *status.
 	return nil
 }
 
-func (h *RoleService) Update(ctx context.Context, req *pb.RoleRequest, rsp *pb.Role) error {
+func (h *RoleService) Update(ctx context.Context, req *pb.RoleRequest, rsp *status.Status) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")

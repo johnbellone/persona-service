@@ -49,20 +49,20 @@ func NewRealmServiceEndpoints() []*api.Endpoint {
 		},
 		&api.Endpoint{
 			Name:    "RealmService.Get",
-			Path:    []string{"/api/v1/realms/{name}"},
+			Path:    []string{"/api/v1/realms/{param}"},
 			Method:  []string{"GET"},
 			Handler: "rpc",
 		},
 		&api.Endpoint{
 			Name:    "RealmService.Update",
-			Path:    []string{"/api/v1/realms/{name}"},
+			Path:    []string{"/api/v1/realms/{param}"},
 			Method:  []string{"PUT"},
 			Body:    "",
 			Handler: "rpc",
 		},
 		&api.Endpoint{
 			Name:    "RealmService.Delete",
-			Path:    []string{"/api/v1/realms/{name}"},
+			Path:    []string{"/api/v1/realms/{parm}"},
 			Method:  []string{"DELETE"},
 			Body:    "",
 			Handler: "rpc",
@@ -160,20 +160,20 @@ func RegisterRealmServiceHandler(s server.Server, hdlr RealmServiceHandler, opts
 	}))
 	opts = append(opts, api.WithEndpoint(&api.Endpoint{
 		Name:    "RealmService.Get",
-		Path:    []string{"/api/v1/realms/{name}"},
+		Path:    []string{"/api/v1/realms/{param}"},
 		Method:  []string{"GET"},
 		Handler: "rpc",
 	}))
 	opts = append(opts, api.WithEndpoint(&api.Endpoint{
 		Name:    "RealmService.Update",
-		Path:    []string{"/api/v1/realms/{name}"},
+		Path:    []string{"/api/v1/realms/{param}"},
 		Method:  []string{"PUT"},
 		Body:    "",
 		Handler: "rpc",
 	}))
 	opts = append(opts, api.WithEndpoint(&api.Endpoint{
 		Name:    "RealmService.Delete",
-		Path:    []string{"/api/v1/realms/{name}"},
+		Path:    []string{"/api/v1/realms/{parm}"},
 		Method:  []string{"DELETE"},
 		Body:    "",
 		Handler: "rpc",
