@@ -11,4 +11,5 @@ type Realm struct {
 	Uuid        pgtype.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
 	Name        string
 	Description pgtype.Text `gorm:"type:text"`
+	Attributes  pgtype.JSONB
 }

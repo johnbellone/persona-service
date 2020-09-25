@@ -3,7 +3,8 @@ package handler
 import (
 	"context"
 
-	pb "github.com/johnbellone/persona-service/proto/persona"
+	pb "github.com/johnbellone/persona-service/proto/persona/api"
+	ptypes "github.com/johnbellone/persona-service/proto/persona/type"
 	log "github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/metadata"
 	"google.golang.org/genproto/googleapis/rpc/status"
@@ -20,7 +21,7 @@ func (h *RoleService) Create(ctx context.Context, req *pb.RoleRequest, rsp *stat
 	return nil
 }
 
-func (h *RoleService) Get(ctx context.Context, req *pb.RoleRequest, rsp *pb.Role) error {
+func (h *RoleService) Get(ctx context.Context, req *pb.RoleRequest, rsp *ptypes.Role) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")

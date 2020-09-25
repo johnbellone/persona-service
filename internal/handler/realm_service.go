@@ -3,7 +3,8 @@ package handler
 import (
 	"context"
 
-	pb "github.com/johnbellone/persona-service/proto/persona"
+	pb "github.com/johnbellone/persona-service/proto/persona/api"
+	ptypes "github.com/johnbellone/persona-service/proto/persona/type"
 	log "github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/metadata"
 	"google.golang.org/genproto/googleapis/rpc/status"
@@ -11,7 +12,7 @@ import (
 
 type RealmService struct{}
 
-func (h *RealmService) Create(ctx context.Context, req *pb.Realm, rsp *status.Status) error {
+func (h *RealmService) Create(ctx context.Context, req *ptypes.Realm, rsp *status.Status) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")
@@ -20,16 +21,17 @@ func (h *RealmService) Create(ctx context.Context, req *pb.Realm, rsp *status.St
 	return nil
 }
 
-func (h *RealmService) Get(ctx context.Context, req *pb.RealmRequest, rsp *pb.Realm) error {
+func (h *RealmService) Get(ctx context.Context, req *pb.RealmRequest, rsp *ptypes.Realm) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")
 	}
 	log.Debugf("metadata: %v\n", metadata)
+
 	return nil
 }
 
-func (h *RealmService) Update(ctx context.Context, req *pb.Realm, rsp *status.Status) error {
+func (h *RealmService) Update(ctx context.Context, req *ptypes.Realm, rsp *status.Status) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")

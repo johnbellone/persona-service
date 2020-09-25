@@ -1,0 +1,15 @@
+syntax = "proto3";
+package persona.type;
+option go_package = "github.com/johnbellone/persona-service/proto/persona/type;persona_type";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+message Realm {
+    string name = 1;
+    string uuid = 2;
+    string description = 3;
+    google.protobuf.Timestamp created = 4;
+    google.protobuf.Timestamp updated = 5;
+    optional google.protobuf.Struct attributes = 6;
+}

@@ -1,0 +1,39 @@
+syntax = "proto3";
+package persona.type;
+option go_package = "github.com/johnbellone/persona-service/proto/persona/type;persona_type";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+message User {
+    string realm = 1;
+    string uuid = 2;
+    string login = 3;
+    string name = 4;
+    string email = 5;
+    string password = 6;
+
+    enum State {
+        INACTIVE = 0;
+        STAGED = 1;
+        PENDING = 2;
+        ACTIVE = 3;
+        RECOVERY = 4;
+        LOCKED = 5;
+        SUSPENDED = 6;
+        EXPIRED = 7;
+    }
+
+    State status = 7;
+
+    google.protobuf.Timestamp created = 8;
+    google.protobuf.Timestamp updated = 9;
+    optional google.protobuf.Timestamp verified = 10;
+    optional google.protobuf.Struct attributes = 11;
+    optional google.protobuf.Timestamp last_login = 12;
+    optional google.protobuf.Timestamp last_active = 13;
+    optional google.protobuf.Timestamp last_password_change = 14;
+
+    repeated string groups = 15;
+    repeated string roles = 16;
+}

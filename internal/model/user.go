@@ -17,5 +17,5 @@ type User struct {
 	LastLogin          pgtype.Timestamptz
 	LastActive         pgtype.Timestamptz
 	ActivatedAt        pgtype.Timestamptz
-	Metadata           pgtype.JSONB
+	Attributes         pgtype.JSONB
 }

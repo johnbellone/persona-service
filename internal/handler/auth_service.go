@@ -3,16 +3,16 @@ package handler
 import (
 	"context"
 
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	pb "github.com/johnbellone/persona-service/proto/persona/api"
-	ptypes "github.com/johnbellone/persona-service/proto/persona/type"
 	log "github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/metadata"
 	"google.golang.org/genproto/googleapis/rpc/status"
 )
 
-type UserService struct{}
+type AuthService struct{}
 
-func (h *UserService) Create(ctx context.Context, req *pb.UserRequest, rsp *status.Status) error {
+func (h *AuthService) Authenticate(ctx context.Context, req *pb.AuthRequest, rsp *pb.AuthResponse) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")
@@ -21,7 +21,7 @@ func (h *UserService) Create(ctx context.Context, req *pb.UserRequest, rsp *stat
 	return nil
 }
 
-func (h *UserService) Get(ctx context.Context, req *pb.UserRequest, rsp *ptypes.User) error {
+func (h *AuthService) Refresh(ctx context.Context, req *pb.AuthRequest, rsp *pb.AuthResponse) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")
@@ -30,16 +30,7 @@ func (h *UserService) Get(ctx context.Context, req *pb.UserRequest, rsp *ptypes.
 	return nil
 }
 
-func (h *UserService) Update(ctx context.Context, req *pb.UserRequest, rsp *status.Status) error {
-	metadata, ok := metadata.FromContext(ctx)
-	if !ok {
-		log.Trace("No metadata received.")
-	}
-	log.Debugf("metadata: %v\n", metadata)
-	return nil
-}
-
-func (h *UserService) Delete(ctx context.Context, req *pb.UserRequest, rsp *status.Status) error {
+func (h *AuthService) Validate(ctx context.Context, req *wrappers.StringValue, rsp *status.Status) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")

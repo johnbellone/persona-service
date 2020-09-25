@@ -12,5 +12,5 @@ type Role struct {
 	Realm       string
 	Name        string
 	Description pgtype.Text `gorm:"type:text"`
-	Metadata    pgtype.JSONB
+	Attributes  pgtype.JSONB
 }

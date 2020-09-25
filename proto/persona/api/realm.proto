@@ -1,0 +1,32 @@
+syntax = "proto3";
+package persona.api.v1;
+option go_package = "github.com/johnbellone/persona-service/proto/persona/api";
+
+import "google/api/annotations.proto";
+import "google/rpc/status.proto";
+import "persona/type/realm.proto";
+
+service RealmService {
+    rpc Create(persona.type.Realm) returns (google.rpc.Status) {
+        option(google.api.http).post = "/api/v1/realms";
+    }
+
+    rpc Get(RealmRequest) returns (persona.type.Realm) {
+        option(google.api.http).get = "/api/v1/realms/{param}";
+    }
+
+    rpc Update(persona.type.Realm) returns (google.rpc.Status) {
+        option(google.api.http).put = "/api/v1/realms/{param}";
+    }
+
+    rpc Delete(RealmRequest) returns (google.rpc.Status) {
+        option(google.api.http).delete = "/api/v1/realms/{param}";
+    }
+}
+
+message RealmRequest {
+    oneof param {
+        string name = 1;
+        string uuid = 2;
+    }
+}

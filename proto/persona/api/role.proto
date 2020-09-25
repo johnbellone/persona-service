@@ -1,19 +1,17 @@
 syntax = "proto3";
-package persona.v1;
-option go_package = "github.com/johnbellone/persona-service/proto/persona";
+package persona.api.v1;
+option go_package = "github.com/johnbellone/persona-service/proto/persona/api";
 
-import "google/api/field_behavior.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/struct.proto";
-import "google/protobuf/timestamp.proto";
 import "google/rpc/status.proto";
+import "persona/type/role.proto";
 
 service RoleService {
     rpc Create(RoleRequest) returns (google.rpc.Status) {
         option(google.api.http).post = "/api/v1/roles";
     }
 
-    rpc Get(RoleRequest) returns (Role) {
+    rpc Get(RoleRequest) returns (persona.type.Role) {
         option(google.api.http).get = "/api/v1/roles/{param}";
     }
 
@@ -32,14 +30,4 @@ message RoleRequest {
         string name = 2;
         string uuid = 3;
     }
-}
-
-message Role {
-    string realm = 1;
-    string name = 2;
-    string uuid = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
-    string description = 4;
-    google.protobuf.Timestamp created = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
-    google.protobuf.Timestamp updated = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
-    google.protobuf.Struct metadata = 7;
 }
