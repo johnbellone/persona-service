@@ -1,33 +1,33 @@
 syntax = "proto3";
 package persona.api.v1;
-option go_package = "github.com/johnbellone/persona-service/proto/persona/api";
+option go_package = "github.com/johnbellone/persona-service/proto/persona/api;persona_api";
 
 import "google/api/annotations.proto";
 import "google/rpc/status.proto";
 import "persona/type/role.proto";
 
 service RoleService {
-    rpc Create(RoleRequest) returns (google.rpc.Status) {
-        option(google.api.http).post = "/api/v1/roles";
-    }
+  rpc Create(RoleRequest) returns (google.rpc.Status) {
+    option(google.api.http).post = "/api/v1/roles";
+  }
 
-    rpc Get(RoleRequest) returns (persona.type.Role) {
-        option(google.api.http).get = "/api/v1/roles/{param}";
-    }
+  rpc Get(RoleRequest) returns (persona.type.Role) {
+    option(google.api.http).get = "/api/v1/roles/{param}";
+  }
 
-    rpc Update(RoleRequest) returns (google.rpc.Status) {
-        option(google.api.http).put = "/api/v1/roles/{param}";
-    }
+  rpc Update(RoleRequest) returns (google.rpc.Status) {
+    option(google.api.http).put = "/api/v1/roles/{param}";
+  }
 
-    rpc Delete(RoleRequest) returns (google.rpc.Status) {
-        option(google.api.http).delete = "/api/v1/roles/{param}";
-    }
+  rpc Delete(RoleRequest) returns (google.rpc.Status) {
+    option(google.api.http).delete = "/api/v1/roles/{param}";
+  }
 }
 
 message RoleRequest {
-    string realm = 1;
-    oneof param {
-        string name = 2;
-        string uuid = 3;
-    }
+  string realm = 1;
+  oneof param {
+    string name = 2;
+    string uuid = 3;
+  }
 }
