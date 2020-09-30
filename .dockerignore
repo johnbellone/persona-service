@@ -1,13 +1,10 @@
 *
 
 !.git/
-!.gen/
 !*.go
 !cmd/
-!go.*
 !internal/
-!pkg/
 !static/
 !Makefile
-!main.mk
-**/pkged.go
+!proto/
+!go.*
