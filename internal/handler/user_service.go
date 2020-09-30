@@ -5,8 +5,8 @@ import (
 
 	pb "github.com/johnbellone/persona-service/proto/persona/api"
 	ptypes "github.com/johnbellone/persona-service/proto/persona/type"
-	log "github.com/micro/go-micro/v2/logger"
-	"github.com/micro/go-micro/v2/metadata"
+	log "github.com/micro/go-micro/v3/logger"
+	"github.com/micro/go-micro/v3/metadata"
 	"google.golang.org/genproto/googleapis/rpc/status"
 )
 
