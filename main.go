@@ -1,5 +1,3 @@
-//go:generate protoc --experimental_allow_proto3_optional -Iproto --go_out=paths=source_relative:./proto proto/persona/type/realm.proto proto/persona/type/group.proto proto/persona/type/role.proto proto/persona/type/user.proto proto/persona/type/person.proto
-//go:generate protoc -Iproto --micro_out=paths=source_relative:./proto --go_out=paths=source_relative:./proto proto/persona/api/auth.proto proto/persona/api/realm.proto proto/persona/api/group.proto proto/persona/api/role.proto proto/persona/api/user.proto
 package main
 
 import (
@@ -15,6 +13,7 @@ import (
 func main() {
 	srv := service.New(
 		service.Name("persona"),
+		service.Version("latest"),
 	)
 
 	_, err := gorm.Open(postgres.Open(""), &gorm.Config{})

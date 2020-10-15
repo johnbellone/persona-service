@@ -1,0 +1,24 @@
+syntax = "proto3";
+package persona.api.v1;
+option go_package = "github.com/johnbellone/persona-service/proto/persona/api;persona_api";
+
+import "google/rpc/status.proto";
+import "persona/type/user.proto";
+
+service UserService {
+  rpc Create(UserRequest) returns (google.rpc.Status);
+
+  rpc Get(UserRequest) returns (persona.type.User);
+
+  rpc Update(UserRequest) returns (google.rpc.Status);
+
+  rpc Delete(UserRequest) returns (google.rpc.Status);
+}
+
+message UserRequest {
+  string realm = 1;
+  oneof param {
+    string login = 2;
+    string email = 3;
+  }
+}

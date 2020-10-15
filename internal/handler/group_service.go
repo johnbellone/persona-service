@@ -30,7 +30,7 @@ func (h *GroupService) Get(ctx context.Context, req *pb.GroupRequest, rsp *ptype
 	return nil
 }
 
-func (h *GroupService) Update(ctx context.Context, req *pb.GroupRequest, rsp *status.Status) error {
+func (h *GroupService) Update(ctx context.Context, req *ptypes.Group, rsp *status.Status) error {
 	metadata, ok := metadata.FromContext(ctx)
 	if !ok {
 		log.Trace("No metadata received.")
