@@ -4,7 +4,15 @@ build:
     - internal/proto
 lint:
   use:
-    - DEFAULT
+    - BASIC
+    - FILE_LOWER_SNAKE_CASE
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+    - PACKAGE_SAME_DIRECTORY
+    - PACKAGE_AFFINITY
   ignore:
     - protoc-gen-openapiv2
     - google
+breaking:
+  use:
+    - WIRE_JSON

@@ -1,0 +1,42 @@
+syntax = "proto3";
+package persona.type;
+option go_package = "github.com/johnbellone/persona-service/proto/persona/type;persona_type";
+
+import "google/type/date.proto";
+
+message Person {
+    string url = 1;
+    string id = 2;
+    string name = 3;
+    string given_name = 4;
+    optional string additional_name = 5;
+    string family_name = 6;
+    optional string nick_name = 7;
+    string gender = 8;
+    google.type.Date birth_date = 9;
+    string birth_place = 10;
+    optional google.type.Date death_date = 11;
+    optional string death_place = 12;
+    repeated string email = 13;
+    repeated string phone = 14;
+    repeated string image = 16;
+
+    message Profile {
+        string name = 1;
+        string id = 2;
+        string url = 3;
+        string username = 4;
+    }
+
+    repeated Profile profile = 17;
+
+    message Job {
+        string organization = 1;
+        google.type.Date start_date = 2;
+        google.type.Date end_date = 3;
+        optional string title = 4;
+        optional string division = 5;
+    }
+
+    repeated Job job = 18;
+}

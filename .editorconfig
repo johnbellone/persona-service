@@ -23,3 +23,11 @@ eclint_indent_style = unset
 
 [Dockerfile]
 indent_size = 4
+
+[*.proto]
+indent_style = space
+indent_size = 2
+
+[*.sql]
+indent_style = space
+indent_size = 2

@@ -1,0 +1,24 @@
+syntax = "proto3";
+package persona.api.v1;
+option go_package = "github.com/johnbellone/persona-service/proto/persona/api/v1;persona_api_v1";
+
+import "google/rpc/status.proto";
+import "persona/type/group.proto";
+
+service GroupService {
+    rpc Create(GroupRequest) returns (google.rpc.Status);
+
+    rpc Get(GroupRequest) returns (persona.type.Group);
+
+    rpc Update(persona.type.Group) returns (google.rpc.Status);
+
+    rpc Delete(GroupRequest) returns (google.rpc.Status);
+}
+
+message GroupRequest {
+    string realm = 1;
+    oneof param {
+        string name = 2;
+        string uuid = 3;
+    }
+}

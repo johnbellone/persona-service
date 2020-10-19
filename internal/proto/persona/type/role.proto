@@ -6,11 +6,11 @@ import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
 message Role {
-  string realm = 1;
-  string name = 2;
-  string uuid = 3;
-  string description = 4;
-  google.protobuf.Timestamp created = 5;
-  google.protobuf.Timestamp updated = 6;
-  optional google.protobuf.Struct attributes = 7;
+    string realm = 1;
+    string name = 2;
+    string uuid = 3;
+    string description = 4;
+    google.protobuf.Timestamp created = 5;
+    google.protobuf.Timestamp updated = 6;
+    optional google.protobuf.Struct attributes = 7;
 }
