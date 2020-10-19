@@ -6,11 +6,11 @@ PROTOC_GATEWAY_OPTS=--grpc-gateway_opt=allow_repeated_fields_in_body=true,genera
 all: check tools build
 
 tools:
-	go generate -tags tools tools/tools.go
+	@mkdir -p proto
+	@go generate -tags tools tools/tools.go
 
 proto: tools
 	@buf check lint
-	@mkdir -p proto
 	@protoc $(PROTOC_OPTS) --experimental_allow_proto3_optional \
 		internal/proto/persona/type/*.proto
 	@protoc $(PROTOC_OPTS) --grpc-gateway_out=proto \
