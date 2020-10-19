@@ -15,6 +15,6 @@ jobs:
       - name: checkout
         if: success()
         uses: actions/checkout@v1
-      - name: make all
+      - name: make proto
         if: success()
         run: make all
