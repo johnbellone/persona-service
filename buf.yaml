@@ -1,6 +1,5 @@
 build:
   roots:
-    - proto
     - internal/proto
 lint:
   use:

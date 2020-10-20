@@ -1,18 +1,11 @@
 syntax = "proto3";
 package persona.api.v1;
-option go_package = "github.com/johnbellone/persona-service/proto/persona/api/v1;persona_api_v1";
-
-import "google/protobuf/wrappers.proto";
-import "google/rpc/status.proto";
+option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/api/v1;persona_api";
 
 service AuthService {
     rpc Authenticate(AuthRequest) returns (AuthResponse);
 
     rpc Refresh(AuthRequest) returns (AuthResponse);
-
-    rpc Validate(google.protobuf.StringValue) returns (google.rpc.Status);
-
-    rpc Invalidate(google.protobuf.StringValue) returns (google.rpc.Status);
 }
 
 message AuthRequest {

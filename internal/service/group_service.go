@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 
-	pb "github.com/johnbellone/persona-service/proto/persona/api/v1"
-	ptypes "github.com/johnbellone/persona-service/proto/persona/type"
+	pb "github.com/johnbellone/persona-service/internal/gen/persona/api/v1"
+	ptypes "github.com/johnbellone/persona-service/internal/gen/persona/type"
 	"google.golang.org/genproto/googleapis/rpc/status"
 )
 

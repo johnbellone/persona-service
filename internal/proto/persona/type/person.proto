@@ -1,6 +1,6 @@
 syntax = "proto3";
 package persona.type;
-option go_package = "github.com/johnbellone/persona-service/proto/persona/type;persona_type";
+option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/type;persona_type";
 
 import "google/type/date.proto";
 

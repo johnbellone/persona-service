@@ -1,20 +1,15 @@
 syntax = "proto3";
 package persona.api.v1;
-option go_package = "github.com/johnbellone/persona-service/proto/persona/api/v1;persona_api_v1";
+option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/api/v1;persona_api";
 
+import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
 import "persona/type/person.proto";
 
 service PersonService {
-    rpc Get(PersonRequest) returns (PersonResponse) {
-        option(google.api.http).get = "/v1/persons/{uuid}";
+    rpc GetPerson(google.protobuf.StringValue) returns (PersonResponse) {
+        option(google.api.http).get = "/v1/persons/{value}";
     }
-}
-
-message PersonRequest {
-    string uuid = 1;
-    string name = 2;
-    string given_name = 3;
 }
 
 message PersonResponse {
