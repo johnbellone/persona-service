@@ -2,17 +2,16 @@ syntax = "proto3";
 package persona.api.v1;
 option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/api/v1;persona_api";
 
-import "google/rpc/status.proto";
 import "persona/type/realm.proto";
 
 service RealmService {
-    rpc Create(persona.type.Realm) returns (google.rpc.Status);
+    rpc Create(persona.type.Realm) returns (RealmResponse);
 
     rpc Get(RealmRequest) returns (persona.type.Realm);
 
-    rpc Update(persona.type.Realm) returns (google.rpc.Status);
+    rpc Update(persona.type.Realm) returns (RealmResponse);
 
-    rpc Delete(RealmRequest) returns (google.rpc.Status);
+    rpc Delete(RealmRequest) returns (RealmResponse);
 }
 
 message RealmRequest {
@@ -20,4 +19,7 @@ message RealmRequest {
         string name = 1;
         string uuid = 2;
     }
+}
+
+message RealmResponse {
 }

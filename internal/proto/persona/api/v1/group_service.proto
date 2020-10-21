@@ -2,17 +2,16 @@ syntax = "proto3";
 package persona.api.v1;
 option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/api/v1;persona_api";
 
-import "google/rpc/status.proto";
 import "persona/type/group.proto";
 
 service GroupService {
-    rpc Create(GroupRequest) returns (google.rpc.Status);
+    rpc Create(GroupRequest) returns (GroupResponse);
 
     rpc Get(GroupRequest) returns (persona.type.Group);
 
-    rpc Update(persona.type.Group) returns (google.rpc.Status);
+    rpc Update(persona.type.Group) returns (GroupResponse);
 
-    rpc Delete(GroupRequest) returns (google.rpc.Status);
+    rpc Delete(GroupRequest) returns (GroupResponse);
 }
 
 message GroupRequest {
@@ -21,4 +20,7 @@ message GroupRequest {
         string name = 2;
         string uuid = 3;
     }
+}
+
+message GroupResponse {
 }

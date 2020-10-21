@@ -2,17 +2,16 @@ syntax = "proto3";
 package persona.api.v1;
 option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/api/v1;persona_api";
 
-import "google/rpc/status.proto";
 import "persona/type/role.proto";
 
 service RoleService {
-    rpc Create(RoleRequest) returns (google.rpc.Status);
+    rpc Create(RoleRequest) returns (RoleResponse);
 
     rpc Get(RoleRequest) returns (persona.type.Role);
 
-    rpc Update(RoleRequest) returns (google.rpc.Status);
+    rpc Update(RoleRequest) returns (RoleResponse);
 
-    rpc Delete(RoleRequest) returns (google.rpc.Status);
+    rpc Delete(RoleRequest) returns (RoleResponse);
 }
 
 message RoleRequest {
@@ -21,4 +20,7 @@ message RoleRequest {
         string name = 2;
         string uuid = 3;
     }
+}
+
+message RoleResponse {
 }

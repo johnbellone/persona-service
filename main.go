@@ -64,6 +64,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Read the TLS server certificate and key from the command-line.
 	cert, err := ioutil.ReadFile(TlsCertFile)
 	if err != nil {
 		log.Fatal(err)
@@ -74,6 +75,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Create the server certificate from the TLS key pairs.
 	Certificate, err = tls.X509KeyPair(cert, key)
 	if err != nil {
 		log.Fatal(err)
@@ -86,6 +88,10 @@ func main() {
 	// Add all of the service handlers to the gRPC server.
 	pb.RegisterPersonServiceServer(s, new(service.PersonHandler))
 	pb.RegisterAuthServiceServer(s, new(service.AuthHandler))
+	pb.RegisterGroupServiceServer(s, new(service.GroupHandler))
+	pb.RegisterRealmServiceServer(s, new(service.RealmHandler))
+	pb.RegisterRoleServiceServer(s, new(service.RoleHandler))
+	pb.RegisterUserServiceServer(s, new(service.UserHandler))
 
 	// Turn on API reflection if we are in debug mode.
 	if Debug {
