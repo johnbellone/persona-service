@@ -2,16 +2,17 @@ PROTOC_GATEWAY_OPTS=--grpc-gateway_opt=allow_repeated_fields_in_body=true,genera
 
 .PHONY: all proto check build tools
 
-all: tools proto check build
+all: build
 
 clean:
-	@rm -fr tmp internal/gen
+	@rm -fr tmp internal/gen bin/persona-service
 
 tools:
 	@mkdir -p internal/gen bin/
+	@go mod tidy
 	@go generate -tags tools tools/tools.go
 	@minica -domains localhost -ip-addresses 127.0.0.1 -ca-cert server.crt -ca-key server.key
-	@rm -fr ./localhost
+	@rm -fr localhost
 
 proto: tools
 	@buf check lint
@@ -25,7 +26,6 @@ build:
 	@go build -o bin/persona-service
 
 check:
-	@go mod tidy
 	@golangci-lint run --skip-dirs internal/proto/google
 
 release: all

@@ -11,6 +11,6 @@ import (
 
 type PersonHandler struct{}
 
-func (h *PersonHandler) GetPerson(ctx context.Context, req *wrappers.StringValue) (*pb.PersonResponse, error) {
+func (h *PersonHandler) Get(ctx context.Context, req *wrappers.StringValue) (*pb.PersonResponse, error) {
 	return nil, status.Error(codes.NotFound, "Not implemented")
 }

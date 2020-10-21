@@ -6,6 +6,7 @@ require (
 	github.com/bufbuild/buf v0.26.0
 	github.com/go-swagger/go-swagger v0.25.0
 	github.com/golang/protobuf v1.4.2
+	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.0
 	github.com/jackc/pgtype v1.4.2
 	github.com/jackc/pgx/v4 v4.8.1 // indirect

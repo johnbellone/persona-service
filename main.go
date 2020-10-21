@@ -6,12 +6,16 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
-	"os"
 
 	pb "github.com/johnbellone/persona-service/internal/gen/persona/api/v1"
 	"github.com/johnbellone/persona-service/internal/service"
 
+	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
+
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
@@ -36,6 +40,10 @@ func init() {
 	flag.StringVar(&TlsKeyFile, "tls-key", "server.key", "Set the path to TLS key.")
 	flag.StringVar(&DatabaseUrl, "database-url", "", "Set the database connection string.")
 	flag.StringVar(&Environment, "environment", "development", "Set the environment name.")
+}
+
+func main() {
+	flag.Parse()
 
 	switch {
 	case Debug:
@@ -52,12 +60,6 @@ func init() {
 	default:
 		log.SetFormatter(&log.TextFormatter{})
 	}
-
-	log.SetOutput(os.Stdout)
-}
-
-func main() {
-	flag.Parse()
 
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", Port))
 	if err != nil {
@@ -81,8 +83,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	entry := logrus.NewEntry(log.StandardLogger())
+	grpc_logrus.ReplaceGrpcLogger(entry)
+
 	s := grpc.NewServer(
 		grpc.Creds(credentials.NewServerTLSFromCert(&Certificate)),
+		grpc_middleware.WithUnaryServerChain(
+			grpc_logrus.UnaryServerInterceptor(entry),
+		),
+		grpc_middleware.WithStreamServerChain(
+			grpc_logrus.StreamServerInterceptor(entry),
+		),
 	)
 
 	// Add all of the service handlers to the gRPC server.
