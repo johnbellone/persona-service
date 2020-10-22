@@ -5,8 +5,11 @@ option go_package = "github.com/johnbellone/persona-service/internal/gen/persona
 import "google/protobuf/wrappers.proto";
 import "google/api/annotations.proto";
 import "persona/type/person.proto";
+import "persona/rpc/options.proto";
 
 service PersonService {
+    option (persona.rpc.default_method_access) = METHOD_ACCESS_UNSPECIFIED;
+
     rpc Get(google.protobuf.StringValue) returns (PersonResponse) {
         option(google.api.http).get = "/v1/persons/{value}";
     }

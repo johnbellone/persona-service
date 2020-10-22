@@ -1,0 +1,23 @@
+syntax = "proto3";
+package persona.rpc;
+option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/rpc;persona_rpc";
+
+import "google/protobuf/descriptor.proto";
+
+enum MethodAccess {
+    METHOD_ACCESS_UNSPECIFIED = 0;
+
+    METHOD_ACCESS_AUTH_NONE = 1;
+
+    METHOD_ACCESS_AUTH_REQUIRED = 2;
+
+    METHOD_ACCESS_AUTH_OPTIONAL = 3;
+}
+
+extend google.protobuf.ServiceOptions {
+    persona.rpc.MethodAccess default_method_access = 2019;
+}
+
+extend google.protobuf.MethodOptions {
+    persona.rpc.MethodAccess method_access = 2020;
+}

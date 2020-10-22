@@ -3,8 +3,11 @@ package persona.api.v1;
 option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/api/v1;persona_api";
 
 import "persona/type/group.proto";
+import "persona/rpc/options.proto";
 
 service GroupService {
+    option (persona.rpc.default_method_access) = METHOD_ACCESS_AUTH_REQUIRED;
+
     rpc Create(GroupRequest) returns (GroupResponse);
 
     rpc Get(GroupRequest) returns (persona.type.Group);

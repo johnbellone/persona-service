@@ -18,7 +18,7 @@ proto: tools
 	@buf check lint
 	@protoc --experimental_allow_proto3_optional \
 		-Iinternal/proto --go_out=paths=source_relative:./internal/gen \
-		internal/proto/persona/type/*.proto
+		internal/proto/persona/type/*.proto internal/proto/persona/rpc/*.proto
 	@protoc -Iinternal/proto --go_out=plugins=grpc,paths=source_relative:./internal/gen \
 		internal/proto/persona/api/v1/*.proto
 
