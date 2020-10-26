@@ -2,16 +2,10 @@ syntax = "proto3";
 package persona.api.v1;
 option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/api/v1;persona_api";
 
-import "persona/rpc/options.proto";
-
 service AuthService {
-    rpc Authenticate(AuthRequest) returns (AuthResponse) {
-        option (persona.rpc.method_access) = METHOD_ACCESS_AUTH_NONE;
-    }
+    rpc Authenticate(AuthRequest) returns (AuthResponse);
 
-    rpc Refresh(AuthRequest) returns (AuthResponse) {
-        option (persona.rpc.method_access) = METHOD_ACCESS_AUTH_REQUIRED;
-    }
+    rpc Refresh(AuthRequest) returns (AuthResponse);
 }
 
 message AuthRequest {

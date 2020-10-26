@@ -12,6 +12,7 @@ tools:
 	@go mod tidy
 	@go generate -tags tools tools/tools.go
 	@minica -domains localhost -ip-addresses 127.0.0.1 -ca-cert server.crt -ca-key server.key
+	@openssl rsa -in server.key -pubout > server.pub
 	@rm -fr localhost
 
 proto: tools

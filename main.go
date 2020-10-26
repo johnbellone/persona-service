@@ -1,120 +1,126 @@
 package main
 
 import (
-	"crypto/tls"
+	"context"
+	"crypto/rsa"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"net"
+	"time"
 
-	grpc_auth "github.com/johnbellone/persona-service/internal/auth"
 	pb "github.com/johnbellone/persona-service/internal/gen/persona/api/v1"
+	"github.com/johnbellone/persona-service/internal/server"
 	"github.com/johnbellone/persona-service/internal/service"
+	"github.com/pascaldekloe/jwt"
 
 	log "github.com/sirupsen/logrus"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
 
-var (
-	environment string
-	serverPort  uint
-	tlsCertFile string
-	tlsKeyFile  string
-	verbose     bool
-	debug       bool
-	databaseDsn string
-	sentryDsn   string
-	certificate tls.Certificate
-)
+var config *server.Config
 
 func init() {
-	flag.UintVar(&serverPort, "port", 9090, "Set the server port.")
-	flag.BoolVar(&verbose, "verbose", false, "Turn on verbose logging.")
-	flag.BoolVar(&debug, "debug", false, "Turn on debug logging.")
-	flag.StringVar(&tlsCertFile, "tls-cert", "server.crt", "Set the path to TLS certificate.")
-	flag.StringVar(&tlsKeyFile, "tls-key", "server.key", "Set the path to TLS key.")
-	flag.StringVar(&databaseDsn, "database-dsn", "", "Set the database connection string.")
-	flag.StringVar(&sentryDsn, "sentry-dsn", "", "Set the Sentry connection string.")
-	flag.StringVar(&environment, "environment", "development", "Set the environment name.")
+	config = new(server.Config)
+
+	flag.UintVar(&config.Port, "port", 9090, "Set the server port.")
+	flag.BoolVar(&config.Verbose, "verbose", false, "Turn on verbose logging.")
+	flag.BoolVar(&config.Debug, "debug", false, "Turn on debug logging.")
+	flag.StringVar(&config.TlsCertFile, "tls-cert", "server.crt", "Set the path to TLS certificate.")
+	flag.StringVar(&config.TlsKeyFile, "tls-key", "server.key", "Set the path to TLS key.")
+	flag.StringVar(&config.DatabaseDSN, "database-dsn", "", "Set the database connection string.")
+	flag.StringVar(&config.SentryDSN, "sentry-dsn", "", "Set the Sentry connection string.")
+	flag.StringVar(&config.Environment, "environment", "development", "Set the environment name.")
+}
+
+func JwtFromContext(ctx context.Context) (context.Context, error) {
+	if bearer, err := grpc_auth.AuthFromMD(ctx, "bearer"); err == nil {
+		claims, err := jwt.RSACheck([]byte(bearer), config.JwtPrivateKey.Public().(*rsa.PublicKey))
+		if err != nil {
+			return nil, status.Error(codes.Unauthenticated, "Bad token format")
+		}
+
+		if !claims.Valid(time.Now()) {
+			return nil, status.Error(codes.Unauthenticated, "Token expired")
+		}
+
+		grpc_ctxtags.Extract(ctx).Set("auth.id", claims.ID)
+		grpc_ctxtags.Extract(ctx).Set("auth.iss", claims.Issuer)
+		grpc_ctxtags.Extract(ctx).Set("auth.sub", claims.Subject)
+		grpc_ctxtags.Extract(ctx).Set("auth.exp", claims.Expires)
+		log.Infof("%v", ctx)
+		return context.WithValue(ctx, "jwt", claims.Raw), nil
+	}
+	return ctx, nil
 }
 
 func main() {
 	flag.Parse()
 
+	if err := config.Setup(); err != nil {
+		log.Fatal(err)
+	}
+
 	switch {
-	case debug:
+	case config.Debug:
 		log.SetLevel(log.TraceLevel)
-	case verbose:
+	case config.Verbose:
 		log.SetLevel(log.InfoLevel)
 	default:
 		log.SetLevel(log.WarnLevel)
 	}
 
 	switch {
-	case environment == "production":
+	case config.Environment == "production":
 		log.SetFormatter(&log.JSONFormatter{})
 	default:
 		log.SetFormatter(&log.TextFormatter{})
 	}
 
-	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", serverPort))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Read the TLS server certificate and key from the command-line.
-	cert, err := ioutil.ReadFile(tlsCertFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	key, err := ioutil.ReadFile(tlsKeyFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Create the server certificate from the TLS key pairs.
-	certificate, err = tls.X509KeyPair(cert, key)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	entry := log.NewEntry(log.StandardLogger())
 	grpc_logrus.ReplaceGrpcLogger(entry)
 
+	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Port))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	s := grpc.NewServer(
-		grpc.Creds(credentials.NewServerTLSFromCert(&certificate)),
+		grpc.Creds(credentials.NewServerTLSFromCert(&config.Certificate)),
 		grpc_middleware.WithUnaryServerChain(
 			grpc_ctxtags.UnaryServerInterceptor(),
 			grpc_logrus.UnaryServerInterceptor(entry),
-			grpc_auth.UnaryServerInterceptor(),
+			grpc_auth.UnaryServerInterceptor(JwtFromContext),
 			grpc_recovery.UnaryServerInterceptor(),
 		),
 		grpc_middleware.WithStreamServerChain(
 			grpc_ctxtags.StreamServerInterceptor(),
 			grpc_logrus.StreamServerInterceptor(entry),
+			grpc_auth.StreamServerInterceptor(JwtFromContext),
 			grpc_recovery.StreamServerInterceptor(),
 		),
 	)
 
 	// Add all of the service handlers to the gRPC server.
-	pb.RegisterPersonServiceServer(s, new(service.PersonHandler))
-	pb.RegisterAuthServiceServer(s, new(service.AuthHandler))
-	pb.RegisterGroupServiceServer(s, new(service.GroupHandler))
-	pb.RegisterRealmServiceServer(s, new(service.RealmHandler))
-	pb.RegisterRoleServiceServer(s, new(service.RoleHandler))
-	pb.RegisterUserServiceServer(s, new(service.UserHandler))
+	pb.RegisterPersonServiceServer(s, service.NewPersonHandler(config))
+	pb.RegisterAuthServiceServer(s, service.NewAuthHandler(config))
+	pb.RegisterGroupServiceServer(s, service.NewGroupHandler(config))
+	pb.RegisterRealmServiceServer(s, service.NewRealmHandler(config))
+	pb.RegisterRoleServiceServer(s, service.NewRoleHandler(config))
+	pb.RegisterUserServiceServer(s, service.NewUserHandler(config))
 
 	// Turn on API reflection if we are in debug mode.
-	if debug {
+	if config.Debug {
 		reflection.Register(s)
 	}
 
