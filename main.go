@@ -56,10 +56,11 @@ func JwtFromContext(ctx context.Context) (context.Context, error) {
 
 		grpc_ctxtags.Extract(ctx).Set("auth.id", claims.ID)
 		grpc_ctxtags.Extract(ctx).Set("auth.iss", claims.Issuer)
+		grpc_ctxtags.Extract(ctx).Set("auth.iat", claims.Issued)
 		grpc_ctxtags.Extract(ctx).Set("auth.sub", claims.Subject)
 		grpc_ctxtags.Extract(ctx).Set("auth.exp", claims.Expires)
-		log.Infof("%v", ctx)
-		return context.WithValue(ctx, "jwt", claims.Raw), nil
+		grpc_ctxtags.Extract(ctx).Set("auth.nbf", claims.NotBefore)
+		grpc_ctxtags.Extract(ctx).Set("auth.aud", claims.Audiences)
 	}
 	return ctx, nil
 }
