@@ -19,17 +19,17 @@ func NewGroupHandler(c *server.Config) *GroupHandler {
 }
 
 func (h *GroupHandler) Create(ctx context.Context, req *pb.GroupRequest) (*pb.GroupResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *GroupHandler) Get(ctx context.Context, req *pb.GroupRequest) (*ptypes.Group, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *GroupHandler) Update(ctx context.Context, req *ptypes.Group) (*pb.GroupResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *GroupHandler) Delete(ctx context.Context, req *pb.GroupRequest) (*pb.GroupResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }

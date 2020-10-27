@@ -33,13 +33,13 @@ func (h *UserHandler) Create(ctx context.Context, req *pb.UserRequest) (*pb.User
 }
 
 func (h *UserHandler) Get(ctx context.Context, req *pb.UserRequest) (*ptypes.User, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *UserHandler) Update(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *UserHandler) Delete(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }

@@ -19,17 +19,17 @@ func NewRealmHandler(c *server.Config) *RealmHandler {
 }
 
 func (h *RealmHandler) Create(ctx context.Context, req *ptypes.Realm) (*pb.RealmResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *RealmHandler) Get(ctx context.Context, req *pb.RealmRequest) (*ptypes.Realm, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *RealmHandler) Update(ctx context.Context, req *ptypes.Realm) (*pb.RealmResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *RealmHandler) Delete(ctx context.Context, req *pb.RealmRequest) (*pb.RealmResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }

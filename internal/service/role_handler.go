@@ -19,17 +19,17 @@ func NewRoleHandler(c *server.Config) *RoleHandler {
 }
 
 func (h *RoleHandler) Create(ctx context.Context, req *pb.RoleRequest) (*pb.RoleResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *RoleHandler) Get(ctx context.Context, req *pb.RoleRequest) (*ptypes.Role, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *RoleHandler) Update(ctx context.Context, req *pb.RoleRequest) (*pb.RoleResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }
 
 func (h *RoleHandler) Delete(ctx context.Context, req *pb.RoleRequest) (*pb.RoleResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }

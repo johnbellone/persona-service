@@ -19,5 +19,5 @@ func NewPersonHandler(c *server.Config) *PersonHandler {
 }
 
 func (h *PersonHandler) Get(ctx context.Context, req *wrappers.StringValue) (*pb.PersonResponse, error) {
-	return nil, status.Error(codes.NotFound, "Not implemented")
+	return nil, status.Error(codes.Unimplemented, "Not implemented")
 }

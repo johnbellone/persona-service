@@ -3,7 +3,6 @@ package persona.api.v1;
 option go_package = "github.com/johnbellone/persona-service/internal/gen/persona/api/v1;persona_api";
 
 import "google/protobuf/wrappers.proto";
-import "google/api/annotations.proto";
 import "persona/type/person.proto";
 
 service PersonService {
